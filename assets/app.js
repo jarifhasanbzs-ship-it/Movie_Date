@@ -50,8 +50,9 @@
 
     // let her enjoy it before anything moves on
     setTimeout(() => {
-      doneMsg.classList.add('show');
-      cutBtn.classList.add('gone');
+      stage.classList.add('cut-done');     // fades the "sound on" reminder
+      cutBtn.classList.add('gone');        // and collapses the button away
+      doneMsg.classList.add('show');       // so this rises into its place
     }, 2200);
 
     // ~3.4s of celebrating after the slice falls, then the video
@@ -242,9 +243,15 @@ let dodges = 0;
 function dodge(){
   if (dodges >= 3) return;
   dodges++;
-  const x = (Math.random() - 0.5) * 180;
-  const y = (Math.random() - 0.5) * 90;
-  btnNo.style.transform = `translate(${x}px, ${y}px)`;
+
+  /* it slides inside its own lane, so it never collides with the yes.
+     The lane's width decides how far it can go on small screens. */
+  const lane = btnNo.parentElement;
+  const room = Math.max(0, (lane.clientWidth - btnNo.offsetWidth) / 2 - 6);
+  const x = (Math.random() - 0.5) * 2 * Math.min(room, 110);
+
+  btnNo.style.transform =
+    `translate(${x}px, ${(Math.random() - 0.5) * 22}px) rotate(${(Math.random() - 0.5) * 10}deg)`;
   btnNo.querySelector('span').textContent =
     ['Are you sure?', 'Really?', 'Okay… fine.'][dodges - 1];
 }
@@ -256,11 +263,54 @@ btnNo.addEventListener('click', e => {
   go('scene-convince');          // one more try, with the photo
 });
 
-/* if she still says no after the photo, that's genuinely fine */
-document.getElementById('btn-no-final').addEventListener('click', () => {
-  sendAnswer();
-  go('scene-letter');
-});
+/* ---------- the "still no" that never quite lets her say no ----------
+   There's no way past this one. Every approach sends it somewhere else in
+   the room, and the words soften each time, so it reads as teasing rather
+   than a broken button. The only way on is the yes. */
+const btnNoFinal = document.getElementById('btn-no-final');
+let finalDodges = 0;
+
+const FINAL_LINES = [
+  'Nope 🙈', 'Try again', 'Catch me', 'Not today', 'Still nope',
+  'Almost!', 'So close', 'Nice try 💫', 'Never 🤍'
+];
+
+function dodgeFinal(){
+  finalDodges++;
+
+  /* keep it on screen: the button is measured, then moved somewhere that
+     still fits inside the viewport with a comfortable margin. */
+  const r = btnNoFinal.getBoundingClientRect();
+  const pad = 14;
+  const maxX = Math.max(0, window.innerWidth  - r.width  - pad * 2);
+  const maxY = Math.max(0, window.innerHeight - r.height - pad * 2);
+
+  // where it would land if it hadn't moved yet
+  const homeX = r.left - (parseFloat(btnNoFinal.dataset.dx) || 0);
+  const homeY = r.top  - (parseFloat(btnNoFinal.dataset.dy) || 0);
+
+  const targetX = pad + Math.random() * maxX;
+  const targetY = pad + Math.random() * maxY;
+
+  const dx = targetX - homeX;
+  const dy = targetY - homeY;
+
+  btnNoFinal.dataset.dx = dx;
+  btnNoFinal.dataset.dy = dy;
+
+  btnNoFinal.style.position = 'relative';
+  btnNoFinal.style.zIndex = '7';
+  btnNoFinal.style.transition = 'transform .28s cubic-bezier(.34,1.56,.64,1)';
+  btnNoFinal.style.transform =
+    `translate(${dx}px, ${dy}px) rotate(${(Math.random() - 0.5) * 22}deg)`;
+
+  btnNoFinal.querySelector('span').textContent =
+    FINAL_LINES[(finalDodges - 1) % FINAL_LINES.length];
+}
+
+btnNoFinal.addEventListener('mouseenter', dodgeFinal);
+btnNoFinal.addEventListener('pointerdown', e => { e.preventDefault(); dodgeFinal(); });
+btnNoFinal.addEventListener('click', e => { e.preventDefault(); dodgeFinal(); });
 
 /* ============================================================
    THE MOVIES  —  Star Cineplex, Dhaka
@@ -769,32 +819,6 @@ function blowOut(){
 }
 
 cake.addEventListener('click', blowOut);
-
-/* microphone: actually blow at it, if she allows the mic */
-(function micBlow(){
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-  // only ask once she has interacted, to avoid an instant scary prompt
-  const ask = () => {
-    document.removeEventListener('click', ask);
-    navigator.mediaDevices.getUserMedia({ audio:true }).then(stream => {
-      const ac = new (window.AudioContext || window.webkitAudioContext)();
-      const src = ac.createMediaStreamSource(stream);
-      const an = ac.createAnalyser();
-      an.fftSize = 512;
-      src.connect(an);
-      const buf = new Uint8Array(an.frequencyBinCount);
-      (function listen(){
-        if (blown){ stream.getTracks().forEach(t => t.stop()); ac.close(); return; }
-        an.getByteFrequencyData(buf);
-        let sum = 0;
-        for (let i = 0; i < buf.length; i++) sum += buf[i];
-        if (sum / buf.length > 62) blowOut();
-        requestAnimationFrame(listen);
-      })();
-    }).catch(() => {});
-  };
-  document.addEventListener('click', ask, { once:true });
-})();
 
 /* ============================================================
    CONFETTI

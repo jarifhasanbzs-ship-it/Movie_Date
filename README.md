@@ -29,7 +29,7 @@ python -m http.server 8000
 
 Then open <http://localhost:8000> in a browser.
 
-Opening `index.html` directly with a `file://` URL may prevent the Google Sheets request and microphone features from working.
+Opening `index.html` directly with a `file://` URL may prevent the Google Sheets request from working.
 
 ## Google Sheets Responses
 

@@ -112,8 +112,6 @@ Easiest free option: go to [app.netlify.com/drop](https://app.netlify.com/drop)
 and drag the whole `BdWishhh` folder onto the page. You get a live link in
 about ten seconds. Send her that link.
 
-Hosting also makes the blow-out-the-candle microphone work, which needs HTTPS.
-
 ---
 
 ## What you'll see in the sheet
