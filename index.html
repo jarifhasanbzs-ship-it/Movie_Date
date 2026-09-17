@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="intro-locked">
+
+<!-- ============ 0. THE VIDEO ============ -->
+<div class="intro" id="intro">
+
+  <video id="intro-video" playsinline preload="auto" poster="">
+    <source src="assets/bdWish.mp4" type="video/mp4">
+  </video>
+
+  <!-- the cake is the very first thing she sees -->
+  <div class="cake-stage show" id="cake-stage">
+    <div class="cake-inner">
+
+      <span class="gate-sparkles" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+      </span>
+
+      <p class="cake-eyebrow">
+        <span class="gate-line"></span>
+        18 &middot; 09 &middot; 2026
+        <span class="gate-line"></span>
+      </p>
+
+      <p class="cake-hi">it&rsquo;s your day, babu</p>
+
+      <h1 class="cake-title">
+        <span class="cake-happy">Happy Birthday</span>
+        <em>Nazah</em>
+      </h1>
+
+      <p class="cake-sub">
+        The whole day belongs to you.<br>
+        Come on — let&rsquo;s cut the cake. &#127874;
+      </p>
+
+      <div class="bigcake" id="bigcake">
+
+        <!-- candles -->
+        <div class="candles">
+          <span class="bcandle"><i class="bflame"></i></span>
+          <span class="bcandle"><i class="bflame"></i></span>
+          <span class="bcandle"><i class="bflame"></i></span>
+        </div>
+
+        <!-- tiers -->
+        <div class="btier btier-top">
+          <span class="bicing"></span>
+          <span class="bdots"></span>
+        </div>
+        <div class="btier btier-mid">
+          <span class="bicing"></span>
+          <span class="bdots"></span>
+        </div>
+        <div class="btier btier-base">
+          <span class="bicing"></span>
+          <span class="bdots"></span>
+        </div>
+
+        <div class="bplate"></div>
+
+        <!-- the slice that separates on the cut -->
+        <div class="bslice">
+          <span class="bslice-top"></span>
+          <span class="bslice-mid"></span>
+          <span class="bslice-base"></span>
+        </div>
+
+        <!-- the knife that swings down -->
+        <div class="knife" id="knife">
+          <span class="knife-blade"></span>
+          <span class="knife-handle"></span>
+        </div>
+
+        <div class="cut-line"></div>
+      </div>
+
+      <button class="cut-btn" id="cut-btn">
+        <span class="cut-halo"></span>
+        <span class="cut-ico">&#128298;</span>
+        <span class="cut-text">Let&rsquo;s cut the cake</span>
+      </button>
+
+      <p class="gate-note">
+        <span class="gate-note-ico">&#128266;</span>
+        sound on, please — it matters
+      </p>
+
+      <p class="cake-done" id="cake-done">now&hellip; watch this &#127916;</p>
+    </div>
+  </div>
+
+  <span class="intro-brand">for you ♥</span>
+
+  <!-- skip becomes available 5 seconds into the video -->
+  <button class="skip" id="skip" disabled>
+    <span class="skip-count" id="skip-count">Skip in 5</span>
+    <span class="skip-go">Skip<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </button>
+
+</div>
+
+<canvas id="petals"></canvas>
+<div class="glow-a"></div>
+<div class="glow-b"></div>
+<div class="glow-c"></div>
+
+<!-- bunting garland across the top -->
+<div class="bunting" aria-hidden="true">
+  <svg viewBox="0 0 1200 70" preserveAspectRatio="none">
+    <path d="M0,10 Q300,52 600,30 T1200,10" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+  </svg>
+  <div class="flags" id="flags"></div>
+</div>
+
+<!-- drifting balloons -->
+<div class="balloons" id="balloons" aria-hidden="true"></div>
+
+<!-- streamers hanging from the top corners -->
+<div class="streamers" aria-hidden="true">
+  <span class="streamer s1"></span>
+  <span class="streamer s2"></span>
+  <span class="streamer s3"></span>
+  <span class="streamer s4"></span>
+</div>
+
+<!-- music toggle -->
+<button class="music" id="music" aria-label="Play birthday music"
+        aria-pressed="false" title="music">
+  <span class="music-ring"></span>
+  <span class="music-core">
+    <svg class="ico-note" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/>
+    </svg>
+    <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  </span>
+  <span class="music-tip">tap for music</span>
+</button>
+
+<!-- ============ 1. OPENING ============ -->
+<section class="scene active" id="scene-open">
+  <div class="inner">
+    <p class="eyebrow reveal" style="--d:.2s">a little something, made for you</p>
+    <h1 class="display reveal" style="--d:.5s">Happy<br><em>Birthday</em></h1>
+
+    <!-- the cake -->
+    <div class="cake reveal" style="--d:.95s" id="cake" title="make a wish">
+      <div class="candle">
+        <div class="flame"></div>
+        <div class="smoke"></div>
+        <div class="wick"></div>
+      </div>
+      <div class="tier tier-top">
+        <div class="drip"></div>
+      </div>
+      <div class="tier tier-mid">
+        <div class="drip"></div>
+      </div>
+      <div class="plate"></div>
+    </div>
+    <p class="wish-hint reveal" style="--d:1.15s" id="wish-hint">blow out the candle ✨</p>
+
+    <p class="lede reveal" style="--d:1.3s">
+      Today the world got a little brighter, and I just wanted to build you
+      somewhere of your own to celebrate it.
+    </p>
+    <button class="btn reveal" style="--d:1.6s" data-go="scene-ask">
+      <span>Open it</span>
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <div class="scroll-hint reveal" style="--d:2.2s">made with a lot of thought</div>
+</section>
+
+<!-- ============ 2. THE QUESTION ============ -->
+<section class="scene" id="scene-ask">
+  <div class="inner">
+    <span class="step">first things first</span>
+
+    <figure class="photo photo-sm">
+      <div class="photo-frame">
+        <img src="assets/us.jpeg" alt="Us at the cinema">
+      </div>
+      <figcaption>us, in the dark, being happy</figcaption>
+    </figure>
+
+    <h2 class="title">Do it with me <em>again?</em></h2>
+
+    <p class="lede ask-lede">
+      This is still one of my favourite photos of us. Two seats, the lights
+      going down, you next to me — and honestly I remember almost nothing
+      about the film. Only that I kept looking over at you.
+      <br><br>
+      So. Would you let me take you to a movie, babu?
+    </p>
+
+    <div class="choice-row">
+      <button class="btn" data-go="scene-date"><span>Yes, I'd love to</span></button>
+      <button class="btn ghost" id="btn-no"><span>Not this time</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2b. CONVINCE HER ============ -->
+<section class="scene" id="scene-convince">
+  <div class="inner">
+    <span class="step">okay, but</span>
+    <h2 class="title">Just look at it<br>one more <em>time.</em></h2>
+
+    <figure class="photo photo-tilt">
+      <div class="photo-frame">
+        <img src="assets/us.jpeg" alt="Us at the cinema">
+      </div>
+      <figcaption>this is all I'm asking for</figcaption>
+    </figure>
+
+    <p class="lede plead">
+      I'm not really asking about a movie, babu. I don't care what's playing
+      or where we sit or whether the popcorn is stale again.
+      <br><br>
+      I just want a few hours where it's dark and quiet and you're right
+      there beside me, like this. That's the whole thing. That's all it
+      ever was.
+      <br><br>
+      One more? For me?
+    </p>
+
+    <div class="choice-row">
+      <button class="btn" data-go="scene-date"><span>Okay fine, let's go 🍿</span></button>
+      <button class="btn ghost" id="btn-no-final"><span>Still no</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. PICK THE DAY ============ -->
+<section class="scene" id="scene-date">
+  <div class="inner wide">
+    <span class="step">step one</span>
+    <h2 class="title">When are you <em>free?</em></h2>
+    <p class="sub" id="date-sub">Pick a day this week — I'll keep it free no matter what.</p>
+
+    <div class="cal">
+      <div class="cal-head">
+        <button class="cal-nav" id="cal-prev" aria-label="Previous month">
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="cal-title" id="cal-title"></div>
+        <button class="cal-nav" id="cal-next" aria-label="Next month">
+          <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="cal-dows">
+        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div class="chips" id="date-chips"></div>
+
+    <div class="time-wrap" id="time-wrap">
+      <p class="time-label">and what time?</p>
+      <div class="clock">
+        <div class="hours" id="hours"></div>
+        <div class="ampm" id="ampm">
+          <button class="ap sel" data-ap="AM">AM</button>
+          <button class="ap" data-ap="PM">PM</button>
+        </div>
+      </div>
+      <p class="time-echo" id="time-echo"></p>
+    </div>
+
+    <button class="btn" id="btn-date-next" disabled>
+      <span>See what's on</span>
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ============ 4. PICK A MOVIE ============ -->
+<section class="scene" id="scene-movie">
+  <div class="inner wide">
+    <span class="step">step two</span>
+    <h2 class="title" id="movie-title">So — what are we<br><em>watching?</em></h2>
+    <p class="sub" id="movie-sub">Here's what's showing that day.</p>
+
+    <div class="list-head"><span id="list-head-label">now showing</span></div>
+
+    <div class="cards" id="movie-cards"></div>
+
+    <div class="suggest">
+      <p class="suggest-label">something else in mind?</p>
+      <input type="text" id="custom-input" placeholder="Recommend me one — totally optional" autocomplete="off">
+      <p class="suggest-hint">If you'd rather watch something not on the list, just tell me.</p>
+    </div>
+
+    <button class="btn" id="btn-movie-next" disabled>
+      <span>That's the plan</span>
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ============ 5. THANK YOU ============ -->
+<section class="scene" id="scene-thanks">
+  <div class="inner">
+    <div class="seal">✓</div>
+    <span class="step">it's a date</span>
+    <h2 class="title">Thank <em>you</em></h2>
+    <p class="sub">For saying yes. For all of it, really.</p>
+
+    <div class="ticket">
+      <div class="ticket-top">
+        <span class="ticket-label">admit two</span>
+        <span class="ticket-no">№ 001</span>
+      </div>
+      <div class="ticket-row">
+        <span class="k">Feature</span>
+        <span class="v" id="t-movie">—</span>
+      </div>
+      <div class="ticket-row">
+        <span class="k">Date<span id="t-plural"></span></span>
+        <span class="v" id="t-dates">—</span>
+      </div>
+      <div class="ticket-row" id="t-sug-row" style="display:none">
+        <span class="k">Her pick</span>
+        <span class="v" id="t-sug">—</span>
+      </div>
+      <div class="ticket-row">
+        <span class="k">Time</span>
+        <span class="v" id="t-time">—</span>
+      </div>
+      <div class="ticket-row">
+        <span class="k">Company</span>
+        <span class="v">You &amp; me</span>
+      </div>
+      <div class="ticket-perf"></div>
+      <div class="ticket-foot">no refunds · no take-backs · endlessly valid</div>
+    </div>
+
+    <div class="countdown" id="countdown">
+      <p class="cd-label">until our first one</p>
+      <div class="cd-units">
+        <div class="cd-unit"><span id="cd-d">0</span><small>days</small></div>
+        <div class="cd-unit"><span id="cd-h">0</span><small>hrs</small></div>
+        <div class="cd-unit"><span id="cd-m">0</span><small>min</small></div>
+        <div class="cd-unit"><span id="cd-s">0</span><small>sec</small></div>
+      </div>
+    </div>
+
+    <button class="btn" data-go="scene-letter">
+      <span>One last thing…</span>
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ============ 6. THE LETTER ============ -->
+<section class="scene" id="scene-letter">
+  <div class="inner letter-inner">
+
+    <div class="envelope" id="envelope">
+      <div class="env-flap"></div>
+      <div class="env-body">
+        <div class="env-wax">♥</div>
+      </div>
+      <p class="env-hint">tap to open</p>
+    </div>
+
+    <article class="letter" id="letter">
+      <p class="letter-date" id="letter-date"></p>
+      <h3 class="letter-hi">Babu,</h3>
+
+      <p>I've never been very good at saying the big things out loud, babu.
+      They either come out smaller than they actually are, at the wrong
+      moment, or sometimes not at all. So I built this, I hope you like it —
+      a quiet little corner of the internet that exists for exactly one
+      reason: you.</p>
+
+      <p class="letter-wish">Happy birthday, babu. ❤️</p>
+
+      <p>I hope today made you feel loved in all the little ways. And I hope
+      that somewhere in this busy world, you got a moment just for yourself —
+      a moment where you stopped and realised how genuinely, ridiculously
+      loved you are.</p>
+
+      <p>I know you realise it, babu.</p>
+
+      <p>Thank you for your patience on the days when I probably didn't
+      deserve it. Thank you for laughing at things that weren't even funny,
+      just because I said them. Thank you for staying beside me on the days
+      when I lost myself.</p>
+
+      <p>And most of all, thank you for loving me the way you do.</p>
+
+      <p>You made my world softer, babu. And I don't think you know how rare
+      that is.</p>
+
+      <p>Let's keep loving each other. Through the good days, the stupid
+      fights, the random laughs, the difficult days, and all the little
+      things in between.</p>
+
+      <p class="letter-em">Please never stop loving me.</p>
+
+      <p>I love you. A lot. More than I probably know how to say properly.</p>
+
+      <p>Here's to another year of you — your plans, your stubbornness, your
+      little ways, your dreams, your own version of yourself, and every
+      version of you that's still waiting to come.</p>
+
+      <p>I want to be there for all of them.</p>
+
+      <p class="letter-wish">Happy birthday, babu. ❤️</p>
+
+      <p class="letter-close"><span class="sig">Always yours</span></p>
+
+      <div class="letter-actions">
+        <button class="btn ghost small" id="btn-restart">
+          <span>Start over</span>
+        </button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
